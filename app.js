@@ -13,14 +13,15 @@ function flip() {
 // Creating Boards
 const width = 10;
 
-function createBoard() {
+function createBoard(color) {
     const gameBoardContainer = document.createElement('div');
     gameBoardContainer.classList.add('game-board');
-    gameBoardContainer.style.backgroundColor = 'pink';
+    gameBoardContainer.style.backgroundColor = color;
 
     gamesBoardContainer.append(gameBoardContainer);
 };
 
-createBoard();
+createBoard('yellow', 'player');
+createBoard('pink', 'computer');
 
 flipButton.addEventListener('click', flip); 
