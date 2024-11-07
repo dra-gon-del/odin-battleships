@@ -12,6 +12,18 @@
     background-color: green;
 }
 
+.cruiser {
+    background-color: purple;
+}
+
+.battleship {
+    background-color: orange;
+}
+
+.carrier {
+    background-color: blue;
+}
+
 .destroyer-preview {
     width: 20px;
     height: 10px;
@@ -20,6 +32,24 @@
 
 .submarine-preview {
     width: 30px;
+    height: 10px;
+    margin: 3px;
+}
+
+.cruiser-preview {
+    width: 30px;
+    height: 10px;
+    margin: 3px;
+}
+
+.battleship-preview {
+    width: 40px;
+    height: 10px;
+    margin: 3px;
+}
+
+.carrier-preview {
+    width: 50px;
     height: 10px;
     margin: 3px;
 }
