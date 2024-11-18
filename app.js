@@ -97,3 +97,26 @@ function addShipPiece(ship) {
 };
 
 ships.forEach(ship => addShipPiece(ship));
+
+// Drag player ships
+let draggedShip
+const optionShips = Array.from(optionContainer.children);
+optionShips.forEach(optionShip =>optionShip.addEventListener('dragstart', dragStart));
+
+const allPlayerBlocks = document.querySelectorAll('#player div');
+allPlayerBlocks.forEach(playerBlock => {
+    playerBlock.addEventListener('dragover', dragOver);
+    playerBlock.addEventListener('drop', dropShip);
+});
+
+function dragStart(e){
+    draggedShip = e.target;
+};
+
+function dragOver(e) {
+    e.preventDefault()
+};
+
+function dropShip() {
+
+};
