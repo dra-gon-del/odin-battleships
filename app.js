@@ -222,7 +222,18 @@ function computerGo() {
                 classes = classes.filter(className => className !== 'boom');
                 classes = classes.filter(className => className !== 'taken');
                 computerHits.push(...classes);
+            } else {
+                infoDisplay.textContent = "Nothing hit this time.";
+                allBoardBlocks[randomGo].classList.add('empty');
             };
-        });
+        }, 3000);
+
+        setTimeout(() => {
+            playerTurn = true;
+            turnDisplay.textContent = 'Your go!';
+            infoDisplay.textContent = 'Please take your go.'
+            const allBoardBlocks = document.querySelectorAll('#computer div');
+            allBoardBlocks.forEach(block => block.addEventListener('click', handleClick));
+        }, 6000);
     };
 };
