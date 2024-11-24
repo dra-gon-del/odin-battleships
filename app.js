@@ -47,7 +47,7 @@ class Ship {
 
 const destroyer = new Ship('destroyer', 2);
 const submarine = new Ship('submarine', 3);
-const cruiser = new Ship('cruiser', 2);
+const cruiser = new Ship('cruiser', 3);
 const battleship = new Ship('battleship', 4);
 const carrier = new Ship('carrier', 5);
 
@@ -200,7 +200,7 @@ function handleClick(e) {
         playerTurn = false;
         const allBoardBlocks = document.querySelectorAll('#computer div');
         allBoardBlocks.forEach(block => block.replaceWith(block.cloneNode(true)));
-        setTimeout(computerGo, 3000);
+        setTimeout(computerGo, 2000);
     };
 };
 
@@ -251,11 +251,13 @@ function checkScore(user, userHits, userSunkShips) {
         if (
             userHits.filter(storedShipName => storedShipName === shipName).length === shipLength
         ) {
-            infoDisplay.textContent = `You sunk the ${user}'s ${shipName}!`;
+            
             if (user === 'player') {
+                infoDisplay.textContent = `You sunk the computer's ${shipName}!`;
                 playerHits = userHits.filter(storedShipName => storedShipName !== shipName);
             };
             if (user === 'computer') {
+                infoDisplay.textContent = `The computer sunk your ${shipName}!`;
                 computerHits = userHits.filter(storedShipName => storedShipName !== shipName);
             };
             userSunkShips.push(shipName);
