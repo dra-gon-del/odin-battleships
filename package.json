@@ -1,0 +1,22 @@
+{
+  "name": "odin-battleships",
+  "version": "1.0.0",
+  "description": "Multiplayer Battleship Game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dra-gon-del/odin-battleships"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  
+  "dependencies": {
+    "express": "^4.21.1",
+    "socket.io": "^4.8.1"
+  }
+}
