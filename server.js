@@ -16,6 +16,22 @@ server.listen(PORT, () => console.log(`Server ruunning on port ${PORT}`));
 // Handle a socket connection request from web client.
 const connections = [null, null];
 io.on('connection', socket => {
-    console.log('New WS Connection');  
+    // console.log('New WS Connection');  
 
+    //Find an available player number.
+    let playerIndex = -1;
+    for (const i in connections) {
+        if (connections[i] == null) {
+            playerIndex = i;
+            break;
+        };
+    };
+
+    //Tell connecting client what player number they are.
+    socket.emit('player-number', playerIndex);
+
+    console.log(`Player ${playerIndex} has connected.`);
+
+    //Ignore player 3.
+    if (playerIndex == -1) return;
 });
