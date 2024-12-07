@@ -29,21 +29,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Select player mode.
     singlePlayerButton.addEventListener('click', startSinglePlayer);
-    multiplayerButton.addEventListener('click', multiplayerButton);
+    multiplayerButton.addEventListener('click', startMultiplayer);
 
-    const socket = io();
+    //Multi player.
+    function startMultiplayer() {
+      gameMode = 'multiplayer';
 
-    //Get your player number.
-    socket.on('player-number', num => {
-      if (num == -1){
-        infoDisplay.textContent = "Sorry, the server is full.";
-      } else {
-        playerNum = parseInt(num);
-        if (playerNum == 1) currentPlayer = enemy;
+      const socket = io();
 
-        console.log(playerNum);
+      //Get your player number.
+      socket.on('player-number', num => {
+        if (num == -1){
+          infoDisplay.textContent = "Sorry, the server is full.";
+        } else {
+          playerNum = parseInt(num);
+          if (playerNum == 1) currentPlayer = enemy;
+
+          console.log(playerNum);
+        };
+      });
+
+      //Another player has connected or disconnected.
+      socket.on('player-connection', num => {
+        console.log(`Player number ${num} has connected or disconnected.`);
+        playerConnectedOrDisconnected(num);
+      })
+
+      function playerConnectedOrDisconnected(num) {
+        let player = `.p${parseInt(num) + 1}`;
+        document.querySelector(`${player} .connected span`).classList.toggle('green');
+        if(parseInt(num) == playerNum) document.querySelector(player).style.fontweight = 'bold';
       };
-    });
+    };
+
+    //Single player.
+    function startSinglePlayer() {
+      gameMode = "singlePlayer";
+
+      generate(shipArray[0]);
+      generate(shipArray[1]);
+      generate(shipArray[2]);
+      generate(shipArray[3]);
+      generate(shipArray[4]);
+
+      startButton.addEventListener('click', playGameSingle);
+    };
   
     //Create Board
     function createBoard(grid, squares) {
@@ -217,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     //Game Logic
-    function playGame() {
+    function playGameSingle() {
       if (isGameOver) return
       if (currentPlayer === 'user') {
         turnDisplay.innerHTML = 'Your Go'
@@ -230,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(computerGo, 1000)
       }
     }
-    startButton.addEventListener('click', playGame)
+    
   
     let destroyerCount = 0
     let submarineCount = 0
@@ -254,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       checkForWins()
       currentPlayer = 'computer'
-      playGame()
+      playGameSingle()
     }
   
     let cpuDestroyerCount = 0
@@ -332,6 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
     function gameOver() {
       isGameOver = true
-      startButton.removeEventListener('click', playGame)
+      startButton.removeEventListener('click', playGameSingle)
     }
   })
