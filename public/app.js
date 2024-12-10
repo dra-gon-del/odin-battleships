@@ -39,11 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       //Get your player number.
       socket.on('player-number', num => {
-        if (num == -1){
+        if (num === -1){
           infoDisplay.textContent = "Sorry, the server is full.";
         } else {
           playerNum = parseInt(num);
-          if (playerNum == 1) currentPlayer = enemy;
+          if(playerNum === 1) currentPlayer = "enemy";
 
           console.log(playerNum);
         };
@@ -51,14 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
       //Another player has connected or disconnected.
       socket.on('player-connection', num => {
-        console.log(`Player number ${num} has connected or disconnected.`);
+        console.log(`Player ${num} has connected or disconnected.`);
         playerConnectedOrDisconnected(num);
-      })
+      });
+
+      //Ready button click.
+      startButton.addEventListener('click', () => {
+        if(allShipsPlaced)playGameMulti(socket);
+        else infoDisplay.textContent = "Please place all ships!"
+      });
 
       function playerConnectedOrDisconnected(num) {
         let player = `.p${parseInt(num) + 1}`;
         document.querySelector(`${player} .connected span`).classList.toggle('green');
-        if(parseInt(num) == playerNum) document.querySelector(player).style.fontweight = 'bold';
+        if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
       };
     };
 
@@ -240,13 +246,30 @@ document.addEventListener('DOMContentLoaded', () => {
       } else return
   
       displayGrid.removeChild(draggedShip)
+
+      if(!displayGrid.querySelector('.ship')) allShipsPlaced = true;
     }
   
     function dragEnd() {
-      console.log('dragend')
+      //console.log('dragend')
     }
+
+    // Game logic for multiplayer.
+    function playGameMulti(socket) {
+      if(isGameOver) return;
+      if(!ready) {
+        socket.emit('player-ready');
+        ready = true;
+        playerReady(playerNum); 
+      };
+    };
+
+    function playerReady(num) {
+      let player = `.p${parseInt(num) + 1}`;
+      document.querySelector(`${player} .ready span`).classList.toggle('green');
+    };
   
-    //Game Logic
+    //Game Logic for single player.
     function playGameSingle() {
       if (isGameOver) return
       if (currentPlayer === 'user') {

@@ -15,13 +15,14 @@ server.listen(PORT, () => console.log(`Server ruunning on port ${PORT}`));
 
 // Handle a socket connection request from web client.
 const connections = [null, null];
+
 io.on('connection', socket => {
     // console.log('New WS Connection');  
 
     //Find an available player number.
     let playerIndex = -1;
     for (const i in connections) {
-        if (connections[i] == null) {
+        if (connections[i] === null) {
             playerIndex = i;
             break;
         };
@@ -33,12 +34,12 @@ io.on('connection', socket => {
     console.log(`Player ${playerIndex} has connected.`);
 
     //Ignore player 3.
-    if (playerIndex == -1) return;
+    if (playerIndex === -1) return;
 
     connections[playerIndex] = false;
 
     // Tell everyone what player number just connected.
-    socket.broadcast.emit('player-selection', playerIndex);
+    socket.broadcast.emit('player-connection', playerIndex);
 
     // Handle disconnect.
     socket.on('disconnect', () => {
@@ -46,5 +47,11 @@ io.on('connection', socket => {
         connections[playerIndex] = null;
         //Tell everyone what player number just disconnected.
         socket.broadcast.emit('player-connection', playerIndex)
+    });
+
+    //On ready.
+    socket.on('player-ready', () => {
+        socket.broadcast.emit('enemy-ready', playerIndex);
+        connections[playerIndex] = true;
     });
 });
