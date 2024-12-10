@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if(playerNum === 1) currentPlayer = "enemy";
 
           console.log(playerNum);
+
+          //Get other player status
+          socket.emit('check-players');
         };
       });
 
@@ -53,6 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
       socket.on('player-connection', num => {
         console.log(`Player ${num} has connected or disconnected.`);
         playerConnectedOrDisconnected(num);
+      });
+
+      //On enemy ready.
+      socket.on('enemy-ready', num => {
+        enemyReady = true;
+        playerReady(num);
+        if (ready) playGameMulti(socket);
       });
 
       //Ready button click.
@@ -261,6 +271,14 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('player-ready');
         ready = true;
         playerReady(playerNum); 
+      };
+      if(enemyReady) {
+        if(currentPlayer === 'user') {
+          turnDisplay.textContent = 'Your turn'
+        };
+        if(currentPlayer === 'enemy') {
+          turnDisplay.textContent = 'Enemy turn'
+        }
       };
     };
 
