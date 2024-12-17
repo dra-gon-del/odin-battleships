@@ -78,6 +78,13 @@ io.on('connection', socket => {
         console.log(square);
 
         //Forward the reply to the other
-        socket.broadcast.emit('fire-reply');
+        socket.broadcast.emit('fire-reply', square);
     });
+
+    //Timeout connection
+    setTimeout(() => {
+        connections[playerIndex] = null;
+        socket.emit('timeout');
+        socket.disconnect()
+    }, 600000); //10 min limit per player
 });
