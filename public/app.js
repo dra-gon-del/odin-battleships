@@ -99,6 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         playGameMulti(socket);
       });
 
+      //On fire reply received
+      socket.on('fire-reply', classList => {
+        revealSquare(classList);
+        playGameMulti(socket);
+      });
+
       function playerConnectedOrDisconnected(num) {
         let player = `.p${parseInt(num) + 1}`;
         document.querySelector(`${player} .connected span`).classList.toggle('green');
@@ -326,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (currentPlayer === 'computer') {
         turnDisplay.innerHTML = 'Computers Go'
-        setTimeout(computerGo, 1000)
+        setTimeout(enemyGo, 1000)
       }
     }
     
@@ -363,19 +369,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let cpuCarrierCount = 0
   
   
-    function computerGo() {
-      let random = Math.floor(Math.random() * userSquares.length)
-      if (!userSquares[random].classList.contains('boom')) {
-        userSquares[random].classList.add('boom')
-        if (userSquares[random].classList.contains('destroyer')) cpuDestroyerCount++
-        if (userSquares[random].classList.contains('submarine')) cpuSubmarineCount++
-        if (userSquares[random].classList.contains('cruiser')) cpuCruiserCount++
-        if (userSquares[random].classList.contains('battleship')) cpuBattleshipCount++
-        if (userSquares[random].classList.contains('carrier')) cpuCarrierCount++
+    function enemyGo(square) {
+      if (gameMode === 'singlePlayer') square = Math.floor(Math.random() * userSquares.length)
+      if (!userSquares[square].classList.contains('boom')) {
+        userSquares[square].classList.add('boom')
+        if (userSquares[square].classList.contains('destroyer')) cpuDestroyerCount++
+        if (userSquares[square].classList.contains('submarine')) cpuSubmarineCount++
+        if (userSquares[square].classList.contains('cruiser')) cpuCruiserCount++
+        if (userSquares[square].classList.contains('battleship')) cpuBattleshipCount++
+        if (userSquares[square].classList.contains('carrier')) cpuCarrierCount++
         checkForWins()
-      } else computerGo()
+      } else if (gameMode === 'singlePlayer') enemyGo()
       currentPlayer = 'user'
-      turnDisplay.innerHTML = 'Your Go'
+      turnDisplay.textContent = 'Your Go'
     }
   
     function checkForWins() {
