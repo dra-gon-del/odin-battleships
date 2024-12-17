@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-      //On fire received
+      //On fire received.
       socket.on('fire', id => {
         enemyGo(id);
         const square = userSquares[id];
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playGameMulti(socket);
       });
 
-      //On fire reply received
+      //On fire reply received.
       socket.on('fire-reply', classList => {
         revealSquare(classList);
         playGameMulti(socket);
@@ -192,11 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     else generate(ship)
     }
-    generate(shipArray[0])
-    generate(shipArray[1])
-    generate(shipArray[2])
-    generate(shipArray[3])
-    generate(shipArray[4])
   
     //Rotate the ships
     function rotate() {
@@ -327,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentPlayer === 'user') {
         turnDisplay.innerHTML = 'Your Go'
         computerSquares.forEach(square => square.addEventListener('click', function(e) {
-          revealSquare(square)
+          revealSquare(square.classList)
         }))
       }
       if (currentPlayer === 'computer') {
@@ -344,22 +339,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let carrierCount = 0
   
   
-    function revealSquare(square) {
-      if (!square.classList.contains('boom')) {
-        if (square.classList.contains('destroyer')) destroyerCount++
-        if (square.classList.contains('submarine')) submarineCount++
-        if (square.classList.contains('cruiser')) cruiserCount++
-        if (square.classList.contains('battleship')) battleshipCount++
-        if (square.classList.contains('carrier')) carrierCount++
+    function revealSquare(classList) {
+      const enemySquare = computerGrid.querySelector(`div[data-id='${shotFired}']`)
+      const obj = Object.values(classList)
+      if (!enemySquare.classList.contains('boom') && currentPlayer === 'user' && !isGameOver) {
+        if (obj.includes('destroyer')) destroyerCount++
+        if (obj.includes('submarine')) submarineCount++
+        if (obj.includes('cruiser')) cruiserCount++
+        if (obj.includes('battleship')) battleshipCount++
+        if (obj.includes('carrier')) carrierCount++
       }
       if (square.classList.contains('taken')) {
-        square.classList.add('boom')
+        enemySquare.classList.add('boom')
       } else {
-        square.classList.add('miss')
+        enemySquare.classList.add('miss')
       }
       checkForWins()
-      currentPlayer = 'computer'
-      playGameSingle()
+      currentPlayer = 'enemy'
+      if(gameMode === 'singlePlayer') playGameSingle()
     }
   
     let cpuDestroyerCount = 0
