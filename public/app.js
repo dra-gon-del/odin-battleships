@@ -12,28 +12,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const rotateButton = document.querySelector('#rotate')
     const turnDisplay = document.querySelector('#whose-go')
     const infoDisplay = document.querySelector('#info')
-    const singlePlayerButton = document.querySelector('#singlePlayerButton');
-    const multiplayerButton = document.querySelector('#multiplayerButton');
     const userSquares = []
     const computerSquares = []
     let isHorizontal = true
     let isGameOver = false
     let currentPlayer = 'user'
     const width = 10
-    let gameMode = "";
     let playerNum = 0;
     let ready = false;
     let enemyReady = false;
     let allShipsPlaced = false;
     let shotFired = -1;
 
+    //Ships
+    const shipArray = [
+      {
+        name: 'destroyer',
+        directions: [
+          [0, 1],
+          [0, width]
+        ]
+      },
+      {
+        name: 'submarine',
+        directions: [
+          [0, 1, 2],
+          [0, width, width*2]
+        ]
+      },
+      {
+        name: 'cruiser',
+        directions: [
+          [0, 1, 2],
+          [0, width, width*2]
+        ]
+      },
+      {
+        name: 'battleship',
+        directions: [
+          [0, 1, 2, 3],
+          [0, width, width*2, width*3]
+        ]
+      },
+      {
+        name: 'carrier',
+        directions: [
+          [0, 1, 2, 3, 4],
+          [0, width, width*2, width*3, width*4]
+        ]
+      },
+    ];
+
+    createBoard(userGrid, userSquares)
+    createBoard(computerGrid, computerSquares)
+
     // Select player mode.
-    singlePlayerButton.addEventListener('click', startSinglePlayer);
-    multiplayerButton.addEventListener('click', startMultiplayer);
+    if (gameMode === 'singlePlayer') {
+      startSinglePlayer();
+    } else {
+      startMultiplayer();
+    };
 
     //Multi player.
     function startMultiplayer() {
-      gameMode = 'multiplayer';
 
       const socket = io();
 
@@ -117,6 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     };
 
+    
+
     //Single player.
     function startSinglePlayer() {
       gameMode = "singlePlayer";
@@ -139,47 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
         squares.push(square)
       }
     }
-    createBoard(userGrid, userSquares)
-    createBoard(computerGrid, computerSquares)
   
-    //Ships
-    const shipArray = [
-      {
-        name: 'destroyer',
-        directions: [
-          [0, 1],
-          [0, width]
-        ]
-      },
-      {
-        name: 'submarine',
-        directions: [
-          [0, 1, 2],
-          [0, width, width*2]
-        ]
-      },
-      {
-        name: 'cruiser',
-        directions: [
-          [0, 1, 2],
-          [0, width, width*2]
-        ]
-      },
-      {
-        name: 'battleship',
-        directions: [
-          [0, 1, 2, 3],
-          [0, width, width*2, width*3]
-        ]
-      },
-      {
-        name: 'carrier',
-        directions: [
-          [0, 1, 2, 3, 4],
-          [0, width, width*2, width*3, width*4]
-        ]
-      },
-    ]
+    
   
     //Draw the computers ships in random locations
     function generate(ship) {
