@@ -34,6 +34,7 @@ body {
 }
 
 .btn {
+  font-size: inherit;
   background-color: hsl(30, 100%, 50%);
   padding: .5em 1em;
   outline: none;
@@ -71,8 +72,33 @@ body {
   grid-template-columns: repeat(10, 4.6vmin);
 }
 
+.grid-computer > .taken {
+  background-color: hsl(200, 100%, 50%) !important;
+  border-radius: 0 !important;
+}
+
 .taken, .ship {
   background-color: hsl(0, 0%, 80%)
+}
+
+.taken.start.vertical {
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+.taken.end.vertical {
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+
+.taken.start.horizontal {
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+
+.taken.end.horizontal {
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
 }
 
 .grid-display {
@@ -102,6 +128,7 @@ body {
 }
 .destroyer-container-vertical {
   --height: 2;
+  --width: 1;
 }
 
 .cruiser-container,  
@@ -112,6 +139,7 @@ body {
 .cruiser-container-vertical, 
 .submarine-container-vertical {
   --height: 3;
+  --width: 1;
 }
 
 .battleship-container {
@@ -119,7 +147,8 @@ body {
 }
 
 .battleship-container-vertical {
-  --height: 4; 
+  --height: 4;
+  --width: 1;
 }
 
 
@@ -129,6 +158,17 @@ body {
 
 .carrier-container-vertical {
   --height: 5;
+  --width: 1;
+}
+
+.hidden-info {
+  font-size: 1.5rem;
+  align-items: center;
+  flex-direction: column;
+}
+
+.info-text {
+  margin: 1rem;
 }
 
 .boom {
