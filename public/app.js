@@ -104,7 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
       socket.on('enemy-ready', num => {
         enemyReady = true;
         playerReady(num);
-        if (ready) playGameMulti(socket);
+        if (ready) { 
+          playGameMulti(socket);
+          setupButtons.style.display = 'none';
+        };
       });
 
       // Check player status
@@ -154,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       function playerConnectedOrDisconnected(num) {
         let player = `.p${parseInt(num) + 1}`;
-        document.querySelector(`${player} .connected span`).classList.toggle('green');
+        document.querySelector(`${player} .connected`).classList.toggle('active');
         if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
       };
     };
@@ -314,6 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game logic for multiplayer.
     function playGameMulti(socket) {
+      setupButtons.style.display = 'none';
       if(isGameOver) return;
       if(!ready) {
         socket.emit('player-ready');
@@ -332,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function playerReady(num) {
       let player = `.p${parseInt(num) + 1}`;
-      document.querySelector(`${player} .ready span`).classList.toggle('green');
+      document.querySelector(`${player} .ready`).classList.toggle('active');
     };
   
     //Game Logic for single player.
@@ -389,7 +393,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function enemyGo(square) {
       if (gameMode === 'singlePlayer') square = Math.floor(Math.random() * userSquares.length)
       if (!userSquares[square].classList.contains('boom')) {
-        userSquares[square].classList.add('boom')
+        const hit = userSquares[square].classList.contains('taken');
+        userSquares[square].classList.add(hit ? 'boom' : 'miss')
         if (userSquares[square].classList.contains('destroyer')) cpuDestroyerCount++
         if (userSquares[square].classList.contains('submarine')) cpuSubmarineCount++
         if (userSquares[square].classList.contains('cruiser')) cpuCruiserCount++
